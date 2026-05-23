@@ -64,3 +64,25 @@ func FormatJSON(r Report) string {
 		r.Expression, r.Valid, r.Explanation, issuesJSON,
 	)
 }
+
+// ErrorCount returns the number of issues with severity "error".
+func (r Report) ErrorCount() int {
+	count := 0
+	for _, issue := range r.Issues {
+		if issue.Severity == "error" {
+			count++
+		}
+	}
+	return count
+}
+
+// WarningCount returns the number of issues with severity "warning".
+func (r Report) WarningCount() int {
+	count := 0
+	for _, issue := range r.Issues {
+		if issue.Severity == "warning" {
+			count++
+		}
+	}
+	return count
+}
