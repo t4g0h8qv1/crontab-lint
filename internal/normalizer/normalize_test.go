@@ -83,3 +83,24 @@ func TestNormalize_InvalidFieldCount(t *testing.T) {
 		t.Errorf("Normalize(%q) = %q, want passthrough %q", input, got, input)
 	}
 }
+
+func TestNormalize_CaseInsensitive(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"0 0 1 JAN *", "0 0 1 1 *"},
+		{"0 0 * * SUN", "0 0 * * 0"},
+		{"0 0 * * MON-FRI", "0 0 * * 1-5"},
+		{"0 0 1 Jan-Jun *", "0 0 1 1-6 *"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			got := Normalize(tt.input)
+			if got != tt.expected {
+				t.Errorf("Normalize(%q) = %q, want %q", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
